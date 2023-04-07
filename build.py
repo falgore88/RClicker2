@@ -12,9 +12,9 @@ build_exe_options = {
     "path": sys.path,
     "excludes": [],
     "packages": [
-        # 'pynput',
-        # 'six',
-        # 'keyboard'
+        'pynput',
+        'six',
+        'keyboard'
     ],
     'include_files': [],
     # "create_shared_zip": False,
