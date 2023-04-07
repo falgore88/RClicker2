@@ -1,16 +1,32 @@
-# This is a sample Python script.
+import logging
+import sys
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import qdarkstyle
+from PySide6.QtWidgets import QApplication
+from pathlib import Path
+import settings
+from libs.logging import AppLogHandler
 
+from views.main_window import MainWindow
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    logs_path = Path(settings.LOGS_DIR)
+    logs_path.mkdir(parents=True, exist_ok=True)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    profiles_path = Path(settings.PROFILES_DIR)
+    profiles_path.mkdir(parents=True, exist_ok=True)
+
+    app = QApplication()
+
+    main_window = MainWindow()
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    app_handler = AppLogHandler(main_window.logTextField)
+    logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+    app_handler.setFormatter(logFormatter)
+    root_logger.addHandler(app_handler)
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyside6'))
+    main_window.show()
+    sys.exit(app.exec())
